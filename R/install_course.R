@@ -322,7 +322,12 @@ uninstall_all_courses <- function(force = FALSE){
       }
     } else {
       result<-unlink(path, recursive=TRUE, force=TRUE)
-      ifelse(result != 1, message(s()%N%"All courses uninstalled successfully!"), stop(s()%N%"Uninstall failed."))
+      if (!result){
+        message(s()%N%"All courses uninstalled successfully!")
+      } else {
+        stop(s()%N%"Uninstall failed.")
+      }
+      
     }
   } else {
     stop(s()%N%"No courses found!")
