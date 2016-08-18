@@ -273,7 +273,11 @@ uninstall_course <- function(course_name){
   path <- file.path(swirl_courses_dir(), make_pathname(course_name))
   if(file.exists(path)){
     result<-unlink(path, recursive=TRUE, force=TRUE)
-    ifelse(result != 1, message(s()%N%"Course uninstalled successfully!"), stop(s()%N%"Uninstall failed."))
+    if (!result){
+      message(s()%N%"Course uninstalled successfully!")
+    } else {
+      stop(s()%N%"Uninstall failed.")
+    }
   } else {
     stop(s()%N%"Course not found!")
   }
@@ -306,7 +310,12 @@ uninstall_all_courses <- function(force = FALSE){
       selection <- select.list(c(s()%N%"Yes", s()%N%"No"))
       if(selection == s()%N%"Yes"){
         result<-unlink(path, recursive=TRUE, force=TRUE)
-        ifelse(result != 1, message(s()%N%"All courses uninstalled successfully!"), stop(s()%N%"Uninstall failed."))
+        if (!result){
+          message(s()%N%"All courses uninstalled successfully!")
+        } else {
+          stop(s()%N%"Uninstall failed.")
+        }
+
       } else {
         message("No courses were uninstalled.")
         return()
