@@ -247,9 +247,9 @@ welcome.default <- function(e, ...){
               skip_after = TRUE)
     resp <- readline(s()%N%"What shall I call you? ")
   }
-  writable <- file.access(file.path(find.package("swirl"), "user_data"), mode = 2)
-  if (writable == -1)stop("Please check your user name.")
-  if (writable == -1)stop("Please check your user name and file permissions.")
+  if (file.access(file.path(find.package("swirl"), "user_data"), mode = 2) == -1){
+    stop("Please check your user name and file permissions.")
+  }
   return(resp)
 }
 
