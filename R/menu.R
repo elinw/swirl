@@ -240,15 +240,25 @@ welcome.test <- function(e, ...){
 # Default version.
 #' @importFrom stringr str_detect str_trim
 welcome.default <- function(e, ...){
-  swirl_out(s()%N%"Welcome to swirl! Please sign in. If you've been here before, use the same name as you did then. If you are new, call yourself something unique.", skip_after=TRUE)
-  resp <- readline(s()%N%"What shall I call you? ")
-  while(str_detect(resp, '[[:punct:]]') || nchar(str_trim(resp)) < 1) {
-    swirl_out(s()%N%"Please don't use any quotes or other punctuation in your name.",
-              skip_after = TRUE)
+  resp<-system("whoami", intern=TRUE)
+  # Make this more generic for use by other people
+  resp<-gsub(".", "", resp, fixed=TRUE)
+  
+  if (is.null(resp)){
+    swirl_out(s()%N%"Welcome to swirl! Please sign in. If you've been here before, use the same name as you did then. If you are new, call yourself something unique.", skip_after=TRUE)
     resp <- readline(s()%N%"What shall I call you? ")
-  }
-  if (file.access(file.path(find.package("swirl"), "user_data"), mode = 2) == -1){
-    stop("Please check your user name and file permissions.")
+  
+
+    while(str_detect(resp, '[[:punct:]]') || nchar(str_trim(resp)) < 1) {
+      swirl_out(s()%N%"Please don't use any quotes or other punctuation in your name.",
+                skip_after = TRUE)
+      if (!is.null(myname)){
+        resp <- readline(s()%N%"What shall I call you? ")
+      }
+    }
+    }
+  if (file.access(file.path(.Library.site[1], "swirl_user_data", resp), mode = 2) == -1){
+    #stop("Please check your user name and file permissions.")
   }
   return(resp)
 }
